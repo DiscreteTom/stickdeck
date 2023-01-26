@@ -1,13 +1,18 @@
 import bluetooth
 from pyjoystick.sdl2 import Key, Joystick, run_event_loop
 import protocol
+import datetime
 
+# configs
 port = 1
+fps = 200  # how many times per second to send data
 
 # globals
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 client_sock = None
 state = protocol.State()
+last_send_timestamp = 0
+interval = 1 / fps
 
 
 def print_add(joy):
@@ -65,7 +70,12 @@ def key_received(key: Key):
       state.right_trigger = int(key.value * 255)  # [0, 1] => [0, 255]
   elif key.keytype == Key.KeyTypes.HAT:
     state.button_DPAD = key.value
-  client_sock.send(state.encode())
+
+  # send data if enough time has passed
+  global last_send_timestamp
+  if datetime.datetime.now().timestamp() - last_send_timestamp > interval:
+    client_sock.send(state.encode())
+    last_send_timestamp = datetime.datetime.now().timestamp()
 
 
 # listen
