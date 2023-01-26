@@ -1,7 +1,7 @@
 class State:
 
   def __init__(self):
-    self.left_joystick_x = 0  # [-32768, 32767], 2 bytes
+    self.left_joystick_x = 0  # [0, 65535], 2 bytes
     self.left_joystick_y = 0
     self.left_trigger = 0  # [0, 255], 1 byte
     self.right_joystick_x = 0
@@ -41,11 +41,11 @@ class State:
 
   def decode(self, data: bytes) -> 'State':
     ret = State()
-    ret.left_joystick_x = data[0] << 8 + data[1]
-    ret.left_joystick_y = data[2] << 8 + data[3]
+    ret.left_joystick_x = (data[0] << 8) + data[1]
+    ret.left_joystick_y = (data[2] << 8) + data[3]
     ret.left_trigger = data[4]
-    ret.right_joystick_x = data[5] << 8 + data[6]
-    ret.right_joystick_y = data[7] << 8 + data[8]
+    ret.right_joystick_x = (data[5] << 8) + data[6]
+    ret.right_joystick_y = (data[7] << 8) + data[8]
     ret.right_trigger = data[9]
     ret.button_A = data[10] & 0x01
     ret.button_B = data[10] & 0x02
