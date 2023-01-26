@@ -1,11 +1,11 @@
 class State:
 
   def __init__(self):
-    self.left_joystick_x = 0  # [0, 65535], 2 bytes
-    self.left_joystick_y = 0
+    self.left_joystick_x = 32768  # [0, 65535], 2 bytes
+    self.left_joystick_y = 32768
     self.left_trigger = 0  # [0, 255], 1 byte
-    self.right_joystick_x = 0
-    self.right_joystick_y = 0
+    self.right_joystick_x = 32768
+    self.right_joystick_y = 32768
     self.right_trigger = 0
     self.button_A = 0  # 0 or 1
     self.button_B = 0
