@@ -1,15 +1,27 @@
 import bluetooth
 import vgamepad
 import protocol
+import sys
+
+if len(sys.argv) < 2:
+  print('Usage: python3 win.py <mac> [port=1]')
+  exit(1)
+
+address = sys.argv[1]
+
+if len(sys.argv) == 3:
+  port = int(sys.argv[2])
+else:
+  port = 1
 
 gamepad = vgamepad.VX360Gamepad()
-sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+sock = bluetooth.BluetoothSocket(
+    bluetooth.RFCOMM)  # windows only support RFCOMM
 
 retry = 3
-
 while retry > 0:
   try:
-    sock.connect(('2C:3B:70:EF:91:F2', 1))
+    sock.connect((address, port))
     break
   except Exception as e:
     retry -= 1
