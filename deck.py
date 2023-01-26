@@ -88,7 +88,7 @@ def key_received(key: Key):
 server_sock.bind(("", port))
 server_sock.listen(1)
 
-print('listening')
+print(f'listening at {bluetooth.read_local_bdaddr()[0]} with port {port}')
 
 client_sock, address = server_sock.accept()
 print("Accepted connection from ", address)
