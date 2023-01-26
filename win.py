@@ -19,6 +19,9 @@ sock = bluetooth.BluetoothSocket(
     bluetooth.RFCOMM)  # windows only support RFCOMM
 state = protocol.State()  # state cache
 protocol_len = len(state.encode())  # protocol byte length
+# smallest power of 2 larger than protocol_len
+recv_len = 2**((protocol_len - 1).bit_length())
+buffer = bytes()
 
 # connect & retry
 retry = 3
@@ -43,8 +46,15 @@ def apply_btn(btn: int, value: int):
 
 
 while True:
-  data = sock.recv(protocol_len)
-  new_state = state.decode(data)
+  # recv more if buffer is not enough
+  while len(buffer) < protocol_len:
+    data = sock.recv(recv_len)
+    if not data:
+      sys.exit(0)  # gracefully exit when deck is down
+    buffer += data
+
+  new_state = state.decode(buffer[:protocol_len])
+  buffer = buffer[protocol_len:]
 
   # joysticks
   if new_state.left_joystick_x != state.left_joystick_x or new_state.left_joystick_y != state.left_joystick_y:
