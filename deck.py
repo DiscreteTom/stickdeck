@@ -4,6 +4,7 @@ import protocol
 
 port = 1
 
+# globals
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 client_sock = None
 state = protocol.State()
@@ -67,10 +68,12 @@ def key_received(key: Key):
   client_sock.send(state.encode())
 
 
+# listen
 server_sock.bind(("", port))
 server_sock.listen(1)
 print(f'listening at {bluetooth.read_local_bdaddr()[0]} with port {port}')
 
+# get client
 client_sock, address = server_sock.accept()
 print("Accepted connection from ", address)
 
@@ -80,6 +83,7 @@ print("Accepted connection from ", address)
 #     address[0],
 #     17)  # drop packets if they are older than 17 ms to ensure 60 fps
 
+# main loop
 run_event_loop(print_add, print_remove, key_received)
 
 client_sock.close()

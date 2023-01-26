@@ -3,21 +3,24 @@ import vgamepad
 import protocol
 import sys
 
+# parse command line arguments
 if len(sys.argv) < 2:
   print('Usage: python3 win.py <mac> [port=1]')
   exit(1)
-
 address = sys.argv[1]
-
 if len(sys.argv) == 3:
   port = int(sys.argv[2])
 else:
   port = 1
 
+# globals
 gamepad = vgamepad.VX360Gamepad()
 sock = bluetooth.BluetoothSocket(
     bluetooth.RFCOMM)  # windows only support RFCOMM
+state = protocol.State()  # state cache
+protocol_len = len(state.encode())  # protocol byte length
 
+# connect & retry
 retry = 3
 while retry > 0:
   try:
@@ -28,16 +31,10 @@ while retry > 0:
     if retry == 0:
       raise e
     print('retry')
-
 print('connected')
 
-# state cache
-state = protocol.State()
 
-# protocol byte length
-protocol_len = len(state.encode())
-
-
+# util function
 def apply_btn(btn: int, value: int):
   if value == 0:
     gamepad.release_button(btn)
