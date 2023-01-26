@@ -95,7 +95,9 @@ print("Accepted connection from ", address)
 #     address[0], 1000 / fps)  # drop packets if they are too old to ensure fps
 
 # main loop
-run_event_loop(print_add, print_remove, key_received)
-
-client_sock.close()
-server_sock.close()
+try:
+  run_event_loop(print_add, print_remove, key_received)
+except KeyboardInterrupt:
+  # gracefully exit on ctrl-c
+  client_sock.close()
+  server_sock.close()
