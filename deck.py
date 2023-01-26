@@ -91,8 +91,11 @@ server_sock.listen(1)
 print(f'listening at {bluetooth.read_local_bdaddr()[0]} with port {port}')
 
 # get client
-client_sock, address = server_sock.accept()
-print("Accepted connection from ", address)
+try:
+  client_sock, address = server_sock.accept()
+  print("Accepted connection from ", address)
+except:
+  sys.exit(0)
 
 # currently set_packet_timeout is not working
 # https://github.com/pybluez/pybluez/issues/465
