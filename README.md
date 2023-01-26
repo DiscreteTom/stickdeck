@@ -48,7 +48,7 @@ python win.py <address> [port=1]
 
 > **Note**: You can debug the joystick by running `joy.cpl` utility on Windows.
 
-## Access from Desktop
+## Access from SteamDeck's Desktop
 
 You can create a shell script on the desktop with some contents like:
 
