@@ -32,38 +32,83 @@ while retry > 0:
 print('connected')
 
 # state cache
-left_joystick_value = [0, 0]
-right_joystick_value = [0, 0]
+state = protocol.State()
+
+# protocol byte length
+protocol_len = len(state.encode())
+
+
+def apply_btn(btn: int, value: int):
+  if value == 0:
+    gamepad.release_button(btn)
+  else:
+    gamepad.press_button(btn)
+
 
 while True:
-  data = sock.recv(3)
-  action, value = protocol.decode(data)
+  data = sock.recv(protocol_len)
+  new_state = state.decode(data)
 
-  # print(action, value)
+  # joysticks
+  if new_state.left_joystick_x != state.left_joystick_x or new_state.left_joystick_y != state.left_joystick_y:
+    gamepad.left_joystick(
+        new_state.left_joystick_x - 32768,  # [0, 65535] => [-32768, 32767]
+        new_state.left_joystick_y - 32768)
+  if new_state.right_joystick_x != state.right_joystick_x or new_state.right_joystick_y != state.right_joystick_y:
+    gamepad.right_joystick(
+        new_state.right_joystick_x - 32768,  # [0, 65535] => [-32768, 32767]
+        new_state.right_joystick_y - 32768)
 
-  if action == protocol.idle:
-    pass
-  # button
-  elif action == protocol.press_button:
-    gamepad.press_button(value)
-  elif action == protocol.release_button:
-    gamepad.release_button(value)
-  elif action == protocol.left_trigger:
-    gamepad.left_trigger(value)
-  elif action == protocol.right_trigger:
-    gamepad.right_trigger(value)
-  # joystick
-  elif action == protocol.left_joystick_x:
-    left_joystick_value[0] = value - 32768  # [0, 65535] => [-32768, 32767]
-    gamepad.left_joystick(*left_joystick_value)
-  elif action == protocol.left_joystick_y:
-    left_joystick_value[1] = value - 32768
-    gamepad.left_joystick(*left_joystick_value)
-  elif action == protocol.right_joystick_x:
-    right_joystick_value[0] = value - 32768
-    gamepad.right_joystick(*right_joystick_value)
-  elif action == protocol.right_joystick_y:
-    right_joystick_value[1] = value - 32768
-    gamepad.right_joystick(*right_joystick_value)
+  # triggers
+  if new_state.left_trigger != state.left_trigger:
+    gamepad.left_trigger(new_state.left_trigger)
+  if new_state.right_trigger != state.right_trigger:
+    gamepad.right_trigger(new_state.right_trigger)
+
+  # buttons
+  if new_state.button_A != state.button_A:
+    apply_btn(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_A, new_state.button_A)
+  if new_state.button_B != state.button_B:
+    apply_btn(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_B, new_state.button_B)
+  if new_state.button_X != state.button_X:
+    apply_btn(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_X, new_state.button_X)
+  if new_state.button_Y != state.button_Y:
+    apply_btn(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_Y, new_state.button_Y)
+  if new_state.button_L_SHOULDER != state.button_L_SHOULDER:
+    apply_btn(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_SHOULDER,
+              new_state.button_L_SHOULDER)
+  if new_state.button_R_SHOULDER != state.button_R_SHOULDER:
+    apply_btn(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_SHOULDER,
+              new_state.button_R_SHOULDER)
+  if new_state.button_BACK != state.button_BACK:
+    apply_btn(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_BACK, new_state.button_BACK)
+  if new_state.button_START != state.button_START:
+    apply_btn(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_START, new_state.button_START)
+  if new_state.button_L_THUMB != state.button_L_THUMB:
+    apply_btn(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_LEFT_THUMB,
+              new_state.button_L_THUMB)
+  if new_state.button_R_THUMB != state.button_R_THUMB:
+    apply_btn(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_RIGHT_THUMB,
+              new_state.button_R_THUMB)
+
+  # dpad
+  if new_state.button_DPAD != state.button_DPAD:
+    if new_state.button_DPAD & 0x01 == 0 and state.button_DPAD & 0x01 == 1:
+      gamepad.release_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP)
+    if new_state.button_DPAD & 0x01 == 1 and state.button_DPAD & 0x01 == 0:
+      gamepad.press_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP)
+    if new_state.button_DPAD & 0x02 == 0 and state.button_DPAD & 0x02 == 1:
+      gamepad.release_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_RIGHT)
+    if new_state.button_DPAD & 0x02 == 1 and state.button_DPAD & 0x02 == 0:
+      gamepad.press_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_RIGHT)
+    if new_state.button_DPAD & 0x04 == 0 and state.button_DPAD & 0x04 == 1:
+      gamepad.release_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_DOWN)
+    if new_state.button_DPAD & 0x04 == 1 and state.button_DPAD & 0x04 == 0:
+      gamepad.press_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_DOWN)
+    if new_state.button_DPAD & 0x08 == 0 and state.button_DPAD & 0x08 == 1:
+      gamepad.release_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_LEFT)
+    if new_state.button_DPAD & 0x08 == 1 and state.button_DPAD & 0x08 == 0:
+      gamepad.press_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_LEFT)
 
   gamepad.update()
+  state = new_state
