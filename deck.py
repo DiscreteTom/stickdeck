@@ -3,9 +3,9 @@ from pyjoystick.sdl2 import Key, Joystick, run_event_loop
 import protocol
 import xusb_button
 
-server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-
 port = 1
+
+server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 client_sock = None
 
 
@@ -87,7 +87,6 @@ def key_received(key: Key):
 
 server_sock.bind(("", port))
 server_sock.listen(1)
-
 print(f'listening at {bluetooth.read_local_bdaddr()[0]} with port {port}')
 
 client_sock, address = server_sock.accept()
