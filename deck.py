@@ -5,7 +5,7 @@ import datetime
 
 # configs
 port = 1
-fps = 200  # how many times per second to send data
+fps = 200  # how many times per second to send data, set this to throttle frequency to optimize latency
 
 # globals
 server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
