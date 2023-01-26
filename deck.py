@@ -92,6 +92,12 @@ print(f'listening at {bluetooth.read_local_bdaddr()[0]} with port {port}')
 client_sock, address = server_sock.accept()
 print("Accepted connection from ", address)
 
+# currently set_packet_timeout is not working
+# https://github.com/pybluez/pybluez/issues/465
+# bluetooth.set_packet_timeout(
+#     address[0],
+#     17)  # drop packets if they are older than 17 ms to ensure 60 fps
+
 run_event_loop(print_add, print_remove, key_received)
 
 client_sock.close()
