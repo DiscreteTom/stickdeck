@@ -60,7 +60,7 @@ def run():
       except:
         sys.exit(0)
       if not data:
-        sys.exit(0)  # gracefully exit when deck is down
+        sys.exit(0)  # gracefully exit thread when deck is down
       buffer += data
 
     new_state = state.decode(buffer[:protocol_len])
@@ -140,6 +140,9 @@ run_thread.start()
 try:
   while True:
     time.sleep(1)
+    # check if the thread is still running
+    if not run_thread.is_alive():
+      break
 except KeyboardInterrupt:
   sock.close()
   sys.exit(0)
