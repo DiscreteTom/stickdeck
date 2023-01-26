@@ -47,3 +47,14 @@ python win.py <address> [port=1]
 ```
 
 > **Note**: You can debug the joystick by running `joy.cpl` utility on Windows.
+
+## Access from Desktop
+
+You can create a shell script on the desktop with some contents like:
+
+```bash
+#!/bin/bash
+konsole -e "/bin/bash -c 'python deck.py'"
+```
+
+Then, `chmod +x <script>.sh` makes it executable, then you can start the StickDeck from the desktop!
