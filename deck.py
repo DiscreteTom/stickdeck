@@ -2,6 +2,7 @@ import bluetooth
 from pyjoystick.sdl2 import Key, Joystick, run_event_loop
 import protocol
 import datetime
+import sys
 
 # configs
 port = 1
@@ -76,7 +77,11 @@ def key_received(key: Key):
   # send data if enough time has passed
   global last_send_timestamp
   if datetime.datetime.now().timestamp() - last_send_timestamp > interval:
-    client_sock.send(state.encode())
+    try:
+      client_sock.send(state.encode())
+    except:
+      # if the receiver is down, exit
+      sys.exit(0)
     last_send_timestamp = datetime.datetime.now().timestamp()
 
 
