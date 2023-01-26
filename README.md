@@ -4,6 +4,8 @@ Turn your Steam Deck as a bluetooth joystick(gamepad) on PC.
 
 > **Note**: This solution doesn't implement HID (Human Interface Device), so you have to run a receiver program on your PC.
 
+<iframe src="//player.bilibili.com/player.html?aid=948272039&bvid=BV19s4y1x7KM&cid=980233910&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
 ## Prerequisites
 
 For both PC and Steam Deck:
