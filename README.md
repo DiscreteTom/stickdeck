@@ -27,6 +27,10 @@ Additional requirements for Steam Deck:
 
 ## Run the Sender on Steam Deck
 
+First, set your bluetooth visible: Settings - Bluetooth - Configure - Visible
+
+> **Note**: Or you can use `bluetoothctl` and `discoverable on`.
+
 ```bash
 python deck.py
 ```
@@ -34,5 +38,7 @@ python deck.py
 ## Run the Receiver on PC
 
 ```bash
-python win.py
+python win.py <address> [port=1]
 ```
+
+> **Note**: You can debug the joystick by running `joy.cpl` utility on Windows.
