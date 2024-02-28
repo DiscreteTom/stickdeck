@@ -111,21 +111,21 @@ def run():
 
     # dpad
     if new_state.button_DPAD != state.button_DPAD:
-      if new_state.button_DPAD & 0x01 == 0 and state.button_DPAD & 0x01 == 1:
+      if new_state.button_DPAD & 0x01 == 0 and state.button_DPAD & 0x01 != 0:
         gamepad.release_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP)
-      if new_state.button_DPAD & 0x01 == 1 and state.button_DPAD & 0x01 == 0:
+      if new_state.button_DPAD & 0x01 != 0 and state.button_DPAD & 0x01 == 0:
         gamepad.press_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP)
-      if new_state.button_DPAD & 0x02 == 0 and state.button_DPAD & 0x02 == 1:
+      if new_state.button_DPAD & 0x02 == 0 and state.button_DPAD & 0x02 != 0:
         gamepad.release_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_RIGHT)
-      if new_state.button_DPAD & 0x02 == 1 and state.button_DPAD & 0x02 == 0:
+      if new_state.button_DPAD & 0x02 != 0 and state.button_DPAD & 0x02 == 0:
         gamepad.press_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_RIGHT)
-      if new_state.button_DPAD & 0x04 == 0 and state.button_DPAD & 0x04 == 1:
+      if new_state.button_DPAD & 0x04 == 0 and state.button_DPAD & 0x04 != 0:
         gamepad.release_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_DOWN)
-      if new_state.button_DPAD & 0x04 == 1 and state.button_DPAD & 0x04 == 0:
+      if new_state.button_DPAD & 0x04 != 0 and state.button_DPAD & 0x04 == 0:
         gamepad.press_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_DOWN)
-      if new_state.button_DPAD & 0x08 == 0 and state.button_DPAD & 0x08 == 1:
+      if new_state.button_DPAD & 0x08 == 0 and state.button_DPAD & 0x08 != 0:
         gamepad.release_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_LEFT)
-      if new_state.button_DPAD & 0x08 == 1 and state.button_DPAD & 0x08 == 0:
+      if new_state.button_DPAD & 0x08 != 0 and state.button_DPAD & 0x08 == 0:
         gamepad.press_button(vgamepad.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_LEFT)
 
     gamepad.update()
