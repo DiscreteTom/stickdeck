@@ -1,3 +1,7 @@
+# Deprecated
+
+See [stickdeck-rs](https://github.com/DiscreteTom/stickdeck-rs) instead.
+
 # Stick Deck
 
 Turn your Steam Deck as a bluetooth joystick(gamepad) on PC.
